@@ -1,5 +1,7 @@
 # Filament System Configuration
 
+[![run-tests](https://github.com/skylence-be/filament-system-configuration/actions/workflows/run-tests.yml/badge.svg)](https://github.com/skylence-be/filament-system-configuration/actions/workflows/run-tests.yml)
+
 A flexible system configuration management plugin for Filament 4 with sidebar navigation.
 
 ## Requirements
