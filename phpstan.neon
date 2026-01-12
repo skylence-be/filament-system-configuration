@@ -1,0 +1,15 @@
+parameters:
+    level: 10
+    paths:
+        - src
+    tmpDir: build/phpstan
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        # Filament pages use traits that provide $form property dynamically
+        - '#Access to an undefined property.*\$form#'
+        - '#Cannot call method .* on mixed#'
+        # Auth facade returns mixed in strict analysis
+        - '#Call to an undefined method Illuminate\\Contracts\\Auth\\Factory::user#'
+        # Filament form components have complex union types
+        - '#Parameter .* of method Filament\\Forms\\Components\\.*::.*\(\) expects .*, .* given#'
+        - '#Parameter .* of method Filament\\Schemas\\Components\\.*::.*\(\) expects .*, .* given#'

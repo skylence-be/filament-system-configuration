@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tree:*)",
+      "Bash(composer update:*)",
+      "Bash(vendor/bin/pest)",
+      "Bash(vendor/bin/phpstan analyse:*)",
+      "Bash(vendor/bin/rector process:*)",
+      "Bash(git config:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ]
+  }
+}

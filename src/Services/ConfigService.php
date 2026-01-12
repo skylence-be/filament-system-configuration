@@ -25,6 +25,7 @@ class ConfigService
      */
     protected function getCacheKey(): string
     {
+        /** @var string */
         return config('filament-system-configuration.cache.key', 'system_config:all');
     }
 
@@ -33,6 +34,7 @@ class ConfigService
      */
     protected function getCacheTtl(): int
     {
+        /** @var int */
         return config('filament-system-configuration.cache.ttl', 86400);
     }
 
@@ -41,6 +43,7 @@ class ConfigService
      */
     protected function getTableName(): string
     {
+        /** @var string */
         return config('filament-system-configuration.table_name', 'config_values');
     }
 
@@ -77,6 +80,7 @@ class ConfigService
         }
 
         // Check static config defaults
+        /** @var array<string, mixed> $staticDefaults */
         $staticDefaults = config('filament-system-configuration.defaults', []);
         if (array_key_exists($path, $staticDefaults)) {
             return $staticDefaults[$path];
@@ -105,7 +109,9 @@ class ConfigService
             return $this->loaded;
         }
 
-        $this->loaded = Cache::remember($this->getCacheKey(), $this->getCacheTtl(), $this->loadFromDatabase(...));
+        /** @var array<string, mixed> $cached */
+        $cached = Cache::remember($this->getCacheKey(), $this->getCacheTtl(), $this->loadFromDatabase(...));
+        $this->loaded = $cached;
 
         return $this->loaded;
     }
@@ -171,7 +177,7 @@ class ConfigService
         }
 
         // Encrypt if the field is marked as encrypted
-        if ($field?->isEncrypted() && $value !== null && $value !== '') {
+        if ($field?->isEncrypted() && $value !== null && $value !== '' && (is_string($value) || is_numeric($value))) {
             $value = Crypt::encryptString((string) $value);
         }
 

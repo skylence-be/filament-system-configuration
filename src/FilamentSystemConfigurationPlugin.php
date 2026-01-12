@@ -6,6 +6,7 @@ namespace Skylence\FilamentSystemConfiguration;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Skylence\FilamentSystemConfiguration\Config\ConfigSection;
 use Skylence\FilamentSystemConfiguration\Pages\SystemConfiguration;
 
 class FilamentSystemConfigurationPlugin implements Plugin
@@ -97,7 +98,10 @@ class FilamentSystemConfigurationPlugin implements Plugin
         // Register sections
         foreach ($this->sections as $sectionClass) {
             if (method_exists($sectionClass, 'make')) {
-                SystemConfig::register($sectionClass::make());
+                $section = $sectionClass::make();
+                if ($section instanceof ConfigSection) {
+                    SystemConfig::register($section);
+                }
             }
         }
     }

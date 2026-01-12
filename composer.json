@@ -14,6 +14,7 @@
         "orchestra/testbench": "^10.0",
         "pestphp/pest": "^4.0",
         "pestphp/pest-plugin-laravel": "^4.0",
+        "phpstan/phpstan": "^2.1",
         "rector/rector": "^2.3"
     },
     "autoload": {
@@ -28,7 +29,9 @@
     },
     "scripts": {
         "test": "vendor/bin/pest",
-        "format": "vendor/bin/pint"
+        "format": "vendor/bin/pint",
+        "analyse": "vendor/bin/phpstan analyse",
+        "rector": "vendor/bin/rector process"
     },
     "extra": {
         "laravel": {

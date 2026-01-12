@@ -45,13 +45,17 @@ class SystemConfiguration extends Page implements HasForms
 
     public static function canAccess(): bool
     {
+        /** @var string|false $permission */
         $permission = config('filament-system-configuration.permissions.view', 'view_system_configuration');
 
         if ($permission === false) {
             return true;
         }
 
-        return auth()->user()?->can($permission) ?? false;
+        /** @var \Illuminate\Foundation\Auth\User|null $user */
+        $user = auth()->user();
+
+        return $user?->can($permission) ?? false;
     }
 
     protected static ?string $navigationLabel = 'Configuration';
@@ -82,23 +86,27 @@ class SystemConfiguration extends Page implements HasForms
 
     protected function getDefaultSection(): string
     {
+        /** @var string|null $requested */
         $requested = request()->query('section');
 
-        if ($requested && SystemConfig::hasSection($requested)) {
+        if (is_string($requested) && SystemConfig::hasSection($requested)) {
             return $requested;
         }
 
         // Return first available section
         $sections = SystemConfig::getSections();
 
-        return ! empty($sections) ? $sections[0]->getKey() : 'general';
+        return $sections !== [] ? $sections[0]->getKey() : 'general';
     }
 
     public function getTitle(): string|Htmlable
     {
         $section = $this->getCurrentSection();
 
-        return $section?->getLabel() ?? config('filament-system-configuration.page.title', 'System Configuration');
+        /** @var string $defaultTitle */
+        $defaultTitle = config('filament-system-configuration.page.title', 'System Configuration');
+
+        return $section?->getLabel() ?? $defaultTitle;
     }
 
     public function getSubheading(): ?string
@@ -111,16 +119,19 @@ class SystemConfiguration extends Page implements HasForms
 
     public static function getNavigationLabel(): string
     {
+        /** @var string */
         return config('filament-system-configuration.page.navigation_label', 'Configuration');
     }
 
     public static function getNavigationGroup(): ?string
     {
+        /** @var string|null */
         return config('filament-system-configuration.page.navigation_group');
     }
 
     public static function getNavigationSort(): ?int
     {
+        /** @var int|null */
         return config('filament-system-configuration.page.navigation_sort', 100);
     }
 
@@ -332,17 +343,20 @@ class SystemConfiguration extends Page implements HasForms
         $parts = explode('__', $name);
 
         return [
-            'group' => $parts[0] ?? '',
+            'group' => $parts[0],
             'field' => $parts[1] ?? '',
         ];
     }
 
     public function save(): void
     {
+        /** @var string|false $permission */
         $permission = config('filament-system-configuration.permissions.update', 'update_system_configuration');
 
         if ($permission !== false) {
-            abort_unless(auth()->user()?->can($permission), 403);
+            /** @var \Illuminate\Foundation\Auth\User|null $user */
+            $user = auth()->user();
+            abort_unless((bool) $user?->can($permission), 403);
         }
 
         $section = $this->getCurrentSection();
@@ -351,18 +365,21 @@ class SystemConfiguration extends Page implements HasForms
             return;
         }
 
+        /** @var array<string, mixed> $data */
         $data = $this->form->getState();
         $configService = app(ConfigService::class);
 
         foreach ($data as $key => $value) {
+            $keyString = (string) $key;
+
             // Skip the "use system value" checkbox keys
-            if (str_ends_with((string) $key, '__use_system')) {
+            if (str_ends_with($keyString, '__use_system')) {
                 continue;
             }
 
-            $parsed = $this->parseFormFieldName($key);
+            $parsed = $this->parseFormFieldName($keyString);
             $path = "{$section->getKey()}/{$parsed['group']}/{$parsed['field']}";
-            $useSystemKey = $key.'__use_system';
+            $useSystemKey = $keyString.'__use_system';
 
             // Check if "Use system value" checkbox is checked
             if (isset($data[$useSystemKey]) && $data[$useSystemKey]) {
@@ -377,28 +394,40 @@ class SystemConfiguration extends Page implements HasForms
         // Clear and refresh the cache
         $configService->refresh();
 
+        /** @var string $notificationTitle */
+        $notificationTitle = config('filament-system-configuration.notifications.save.title', 'Configuration saved');
+        /** @var string $notificationBody */
+        $notificationBody = config('filament-system-configuration.notifications.save.body', 'Your settings have been saved successfully.');
+
         Notification::make()
-            ->title(config('filament-system-configuration.notifications.save.title', 'Configuration saved'))
-            ->body(config('filament-system-configuration.notifications.save.body', 'Your settings have been saved successfully.'))
+            ->title($notificationTitle)
+            ->body($notificationBody)
             ->success()
             ->send();
     }
 
     protected function getHeaderActions(): array
     {
+        /** @var string $saveLabel */
+        $saveLabel = config('filament-system-configuration.actions.save.label', 'Save Configuration');
+
         return [
             Action::make('save')
-                ->label(config('filament-system-configuration.actions.save.label', 'Save Configuration'))
+                ->label($saveLabel)
                 ->icon(Heroicon::Check)
                 ->action('save')
                 ->visible(function (): bool {
+                    /** @var string|false $permission */
                     $permission = config('filament-system-configuration.permissions.update', 'update_system_configuration');
 
                     if ($permission === false) {
                         return true;
                     }
 
-                    return auth()->user()?->can($permission) ?? false;
+                    /** @var \Illuminate\Foundation\Auth\User|null $user */
+                    $user = auth()->user();
+
+                    return (bool) ($user?->can($permission) ?? false);
                 }),
         ];
     }

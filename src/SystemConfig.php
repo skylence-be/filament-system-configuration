@@ -12,7 +12,7 @@ use Skylence\FilamentSystemConfiguration\Config\Registries\ConfigRegistry;
  * Static facade for the System Configuration registry.
  *
  * @method static ConfigRegistry register(ConfigSection $section)
- * @method static ConfigRegistry registerMany(array $sections)
+ * @method static ConfigRegistry registerMany(array<ConfigSection> $sections)
  * @method static ConfigSection|null getSection(string $key)
  * @method static array<ConfigSection> getSections()
  * @method static array<string> getFieldPaths()

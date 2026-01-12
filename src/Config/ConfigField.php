@@ -270,6 +270,7 @@ class ConfigField
     public function getOptions(): array
     {
         if ($this->options instanceof Closure) {
+            /** @var array<string, string> */
             return call_user_func($this->options);
         }
 
@@ -312,7 +313,7 @@ class ConfigField
     public function isVisible(): bool
     {
         if ($this->isVisibleUsing instanceof Closure) {
-            return call_user_func($this->isVisibleUsing);
+            return (bool) call_user_func($this->isVisibleUsing);
         }
 
         return true;

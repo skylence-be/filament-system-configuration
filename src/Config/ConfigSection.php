@@ -113,7 +113,7 @@ class ConfigSection
     public function isVisible(): bool
     {
         if ($this->isVisibleUsing instanceof Closure) {
-            return call_user_func($this->isVisibleUsing);
+            return (bool) call_user_func($this->isVisibleUsing);
         }
 
         return true;

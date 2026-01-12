@@ -40,9 +40,14 @@ trait HasConfigurationSidebar
             }
         }
 
+        /** @var string $sidebarTitle */
+        $sidebarTitle = config('filament-system-configuration.sidebar.title', 'Configuration');
+        /** @var string $sidebarDescription */
+        $sidebarDescription = config('filament-system-configuration.sidebar.description', 'System Settings');
+
         return ContextSidebar::make()
-            ->title(config('filament-system-configuration.sidebar.title', 'Configuration'))
-            ->description(config('filament-system-configuration.sidebar.description', 'System Settings'))
+            ->title($sidebarTitle)
+            ->description($sidebarDescription)
             ->navigationItems($items);
     }
 
@@ -58,7 +63,7 @@ trait HasConfigurationSidebar
             $plugin = FilamentSystemConfigurationPlugin::get();
             $groups = $plugin->getSidebarGroups();
 
-            if (! empty($groups)) {
+            if ($groups !== []) {
                 return $groups;
             }
         } catch (\Exception) {
@@ -66,6 +71,7 @@ trait HasConfigurationSidebar
         }
 
         // Fallback to config file
+        /** @var array<string, array<string>>|null $configGroups */
         $configGroups = config('filament-system-configuration.sidebar.groups');
 
         if (! empty($configGroups)) {
