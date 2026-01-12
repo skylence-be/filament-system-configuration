@@ -87,8 +87,8 @@ return [
     |
     */
     'permissions' => [
-        'view' => 'view_system_configuration',
-        'update' => 'update_system_configuration',
+        'view' => false,
+        'update' => false,
     ],
 
     /*
