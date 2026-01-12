@@ -1,0 +1,47 @@
+{
+    "name": "skylence/filament-system-configuration",
+    "description": "A flexible system configuration management plugin for Filament 4 with sidebar navigation.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.2",
+        "filament/filament": "^4.0",
+        "skylence/filament-context-sidebar": "^1.0",
+        "spatie/laravel-package-tools": "^1.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.0",
+        "orchestra/testbench": "^10.0",
+        "pestphp/pest": "^4.0",
+        "pestphp/pest-plugin-laravel": "^4.0",
+        "rector/rector": "^2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Skylence\\FilamentSystemConfiguration\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Skylence\\FilamentSystemConfiguration\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest",
+        "format": "vendor/bin/pint"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Skylence\\FilamentSystemConfiguration\\FilamentSystemConfigurationServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
