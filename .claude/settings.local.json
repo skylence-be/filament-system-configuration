@@ -8,7 +8,9 @@
       "Bash(vendor/bin/rector process:*)",
       "Bash(git config:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(vendor/bin/pint:*)"
     ]
   }
 }

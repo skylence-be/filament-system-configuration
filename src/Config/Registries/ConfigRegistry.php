@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Skylence\FilamentSystemConfiguration\Config\Registries;
 
 use Skylence\FilamentSystemConfiguration\Config\ConfigField;
-use Skylence\FilamentSystemConfiguration\Config\ConfigGroup;
 use Skylence\FilamentSystemConfiguration\Config\ConfigSection;
 
 class ConfigRegistry
